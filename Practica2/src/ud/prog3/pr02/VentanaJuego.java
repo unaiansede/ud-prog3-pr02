@@ -17,6 +17,7 @@ public class VentanaJuego extends JFrame {
 	MundoJuego miMundo;        // Mundo del juego
 	CocheJuego miCoche;        // Coche del juego
 	MiRunnable miHilo = null;  // Hilo del bucle principal de juego	
+	boolean[] pressed = {false,false,false,false};
 
 	/** Constructor de la ventana de juego. Crea y devuelve la ventana inicializada
 	 * sin coches dentro
@@ -80,24 +81,55 @@ public class VentanaJuego extends JFrame {
 			public void keyPressed(KeyEvent e) {
 				switch (e.getKeyCode()) {
 					case KeyEvent.VK_UP: {
-						miCoche.acelera( +5, 1 );
+						//miCoche.acelera( +5, 1 );
+						pressed[0] = true;
 						break;
 					}
 					case KeyEvent.VK_DOWN: {
-						miCoche.acelera( -5, 1 );
+						//miCoche.acelera( -5, 1 );
+						pressed[1] = true;
 						break;
 					}
 					case KeyEvent.VK_LEFT: {
-						miCoche.gira( +10 );
+						//miCoche.gira( +10 );
+						pressed[2] = true;
 						break;
 					}
 					case KeyEvent.VK_RIGHT: {
-						miCoche.gira( -10 );
+						//miCoche.gira( -10 );
+						pressed[3] = true;
 						break;
 					}
 				}
 			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				switch (e.getKeyCode()) {
+				case KeyEvent.VK_UP: {
+					//miCoche.acelera( +5, 1 );
+					pressed[0] = false;
+					break;
+				}
+				case KeyEvent.VK_DOWN: {
+					//miCoche.acelera( -5, 1 );
+					pressed[1] = false;
+					break;
+				}
+				case KeyEvent.VK_LEFT: {
+					//miCoche.gira( +10 );
+					pressed[2] = false;
+					break;
+				}
+				case KeyEvent.VK_RIGHT: {
+					//miCoche.gira( -10 );
+					pressed[3] = false;
+					break;
+				}
+			}
+			}
 		});
+		
+		
 		pPrincipal.setFocusable(true);
 		pPrincipal.requestFocus();
 		pPrincipal.addFocusListener( new FocusAdapter() {
@@ -151,6 +183,20 @@ public class VentanaJuego extends JFrame {
 		public void run() {
 			// Bucle principal forever hasta que se pare el juego...
 			while (sigo) {
+				//Se cambia la velocidad del coche dependiendo si las teclas esta pulsadas o no
+				if(pressed[0]){
+					miCoche.acelera(+5, 1);
+				} 
+				if(pressed[1]){
+					miCoche.acelera(-5, 1);
+				} 
+				if(pressed[2]){
+					miCoche.gira(+10);
+				}
+				if(pressed[3]){
+					miCoche.gira(-10);
+				}
+				
 				// Mover coche
 				miCoche.mueve( 0.040 );
 				// Chequear choques
